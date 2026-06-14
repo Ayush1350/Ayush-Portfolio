@@ -4,7 +4,7 @@ import { Mail, ChevronDown, ArrowRight, Download } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './ui/SocialIcons';
 import { personalInfo } from '../data/portfolio';
 
-const TYPEWRITER_TEXT = '< Frontend & Mobile Engineer />';
+// const TYPEWRITER_TEXT = '< Frontend & Mobile Engineer />';
 
 const terminalLines = [
   { prompt: '$', text: 'const ayush = new Engineer({' },
