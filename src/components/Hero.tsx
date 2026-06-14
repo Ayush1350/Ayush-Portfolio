@@ -18,7 +18,7 @@ const delays = [0.1, 0.3, 0.5, 0.7, 0.9, 1.1];
 
 export default function Hero() {
   const prefersReduced = useReducedMotion();
-  const [typed, setTyped] = useState('');
+  // const [typed, setTyped] = useState('');
   const [terminalLine, setTerminalLine] = useState(0);
   const [terminalText, setTerminalText] = useState('');
   const [terminalCharIdx, setTerminalCharIdx] = useState(0);
