@@ -146,7 +146,8 @@ export default function Hero() {
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </button>
           <a
-            href="#"
+            href="/Ayush_Resume_Software_Developer.pdf"
+            download="Ayush_Resume_Software_Developer.pdf"
             className="group flex items-center gap-2 px-6 py-3 rounded-xl border border-accent/40 text-accent font-medium
               hover:bg-accent/10 hover:border-accent hover:scale-105 hover:shadow-[0_0_20px_rgba(56,189,248,0.15)]
               transition-all duration-300"
