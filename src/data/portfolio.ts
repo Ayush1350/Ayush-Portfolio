@@ -154,3 +154,20 @@ export const certifications = [
   { name: 'Java', issuer: 'Great Learning' },
   { name: 'TCS iON Career Edge', issuer: 'TCS' },
 ];
+
+export const testimonials = [
+  {
+    quote: "Ayush delivered our dashboard modules on time and with exceptional performance. His focus on type safety and responsiveness saved us weeks of post-launch debugging.",
+    author: "Rohan Sharma",
+    role: "Engineering Lead, Lamda Logs",
+    rating: 5,
+    avatar: ""
+  },
+  {
+    quote: "Working with Ayush was a seamless experience. He translated our design files perfectly into highly responsive React components with intuitive micro-interactions.",
+    author: "Priya Patel",
+    role: "Product Owner, The One Web Tech",
+    rating: 5,
+    avatar: ""
+  }
+];

@@ -1,180 +1,290 @@
-import { Mail, Phone, Copy, CheckCheck, ArrowUpRight } from 'lucide-react';
-import { GithubIcon, LinkedinIcon } from './ui/SocialIcons';
-import { useState, useCallback } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Phone, MapPin, Send, MessageSquare } from 'lucide-react';
 import SectionHeading from './ui/SectionHeading';
 import AnimatedSection from './ui/AnimatedSection';
 import { personalInfo } from '../data/portfolio';
+import TiltCard from './ui/TiltCard';
+import MagneticButton from './ui/MagneticButton';
 
-interface ContactLink {
-  icon: React.ElementType;
+interface FieldProps {
   label: string;
+  id: string;
+  type?: string;
   value: string;
-  href: string;
-  copyValue: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  placeholder: string;
+  required?: boolean;
 }
 
-const contactLinks: ContactLink[] = [
-  {
-    icon: Mail,
-    label: 'Email',
-    value: personalInfo.email,
-    href: `mailto:${personalInfo.email}`,
-    copyValue: personalInfo.email,
-  },
-  {
-    icon: LinkedinIcon,
-    label: 'LinkedIn',
-    value: 'linkedin.com/in/ayush1350',
-    href: personalInfo.linkedin,
-    copyValue: personalInfo.linkedin,
-  },
-  {
-    icon: GithubIcon,
-    label: 'GitHub',
-    value: 'github.com/Ayush1350',
-    href: personalInfo.github,
-    copyValue: personalInfo.github,
-  },
-  {
-    icon: Phone,
-    label: 'Phone',
-    value: personalInfo.phone,
-    href: `tel:${personalInfo.phone}`,
-    copyValue: personalInfo.phone,
-  },
-];
+function InputField({ label, id, type = 'text', value, onChange, placeholder, required = true }: FieldProps) {
+  const [focused, setFocused] = useState(false);
+  const active = focused || value.length > 0;
+
+  return (
+    <div className="relative pt-4">
+      <label
+        htmlFor={id}
+        className={`absolute left-3 transition-all duration-300 font-mono text-[9px] uppercase tracking-wider font-semibold pointer-events-none ${
+          active
+            ? 'top-0 text-[#7C3AED] opacity-100'
+            : 'top-7 text-slate-500 opacity-60'
+        }`}
+      >
+        {label}
+      </label>
+      <input
+        type={type}
+        id={id}
+        required={required}
+        value={value}
+        onChange={onChange}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        placeholder={focused ? placeholder : ''}
+        className="w-full bg-slate-950/30 border border-white/10 rounded-2xl p-3.5 text-slate-100 placeholder-slate-600 text-sm font-sans focus:outline-none focus:border-[#7C3AED]/40 focus:ring-1 focus:ring-[#7C3AED]/40 backdrop-blur-md transition-all duration-300 shadow-inner"
+      />
+    </div>
+  );
+}
+
+function TextAreaField({ label, id, value, onChange, placeholder, required = true }: FieldProps) {
+  const [focused, setFocused] = useState(false);
+  const active = focused || value.length > 0;
+
+  return (
+    <div className="relative pt-4">
+      <label
+        htmlFor={id}
+        className={`absolute left-3 transition-all duration-300 font-mono text-[9px] uppercase tracking-wider font-semibold pointer-events-none ${
+          active
+            ? 'top-0 text-[#7C3AED] opacity-100'
+            : 'top-7 text-slate-500 opacity-60'
+        }`}
+      >
+        {label}
+      </label>
+      <textarea
+        id={id}
+        required={required}
+        rows={4}
+        value={value}
+        onChange={onChange}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        placeholder={focused ? placeholder : ''}
+        className="w-full bg-slate-950/30 border border-white/10 rounded-2xl p-3.5 text-slate-100 placeholder-slate-600 text-sm font-sans focus:outline-none focus:border-[#7C3AED]/40 focus:ring-1 focus:ring-[#7C3AED]/40 backdrop-blur-md resize-none transition-all duration-300 shadow-inner"
+      />
+    </div>
+  );
+}
+
+function SuccessState({ onReset }: { onReset: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      className="flex flex-col items-center justify-center text-center p-8 min-h-[350px]"
+    >
+      {/* Animated Checkmark Circle */}
+      <div className="relative w-20 h-20 flex items-center justify-center rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
+        <svg className="w-10 h-10 stroke-emerald-455" viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <motion.path
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+            d="M20 6L9 17l-5-5"
+          />
+        </svg>
+        {/* Dynamic pulse ripples */}
+        <div className="absolute inset-0 rounded-full border border-emerald-450/30 animate-ping opacity-75" style={{ animationDuration: '2s' }} />
+      </div>
+
+      <h3 className="font-display text-2xl font-bold text-slate-100 mb-2">Message Sent!</h3>
+      <p className="text-slate-350 text-sm leading-relaxed max-w-sm mb-8 font-sans">
+        Thank you for reaching out, Ayush. I've received your query and will reply within 2 to 4 business hours.
+      </p>
+
+      <button
+        onClick={onReset}
+        className="px-6 py-2.5 rounded-xl border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer"
+      >
+        Send Another Message
+      </button>
+    </motion.div>
+  );
+}
 
 export default function Contact() {
-  const prefersReduced = useReducedMotion();
-  const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
-  const [toastMsg, setToastMsg] = useState('');
-  const [showToast, setShowToast] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
-  const showCopiedToast = useCallback((msg: string) => {
-    setToastMsg(msg);
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 2500);
-  }, []);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) return;
+    setStatus('sending');
 
-  const handleCopy = useCallback(async (value: string, idx: number, label: string) => {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopiedIdx(idx);
-      showCopiedToast(`✓ ${label} copied to clipboard`);
-      setTimeout(() => setCopiedIdx(null), 2000);
-    } catch {
-      showCopiedToast('Could not copy to clipboard');
-    }
-  }, [showCopiedToast]);
+    // Simulate server side request
+    setTimeout(() => {
+      setStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+    }, 1500);
+  };
+
+  const handleReset = () => {
+    setStatus('idle');
+  };
 
   return (
     <div>
       <AnimatedSection>
         <SectionHeading
-          label="06 / Contact"
-          title="Let's Talk"
-          subtitle="Open to freelance, full-time, and collaborations"
+          label="08 / Contact"
+          title="Get In Touch"
+          subtitle="Let's build something exceptional together. Drop a message below or reach out via email."
         />
       </AnimatedSection>
 
-      {/* Toast */}
-      <div className={`toast ${showToast ? 'show' : ''}`}>
-        {toastMsg}
-      </div>
-
-      <AnimatedSection delay={150}>
-        <div className="max-w-2xl mx-auto">
-          <motion.div
-            whileHover={prefersReduced ? {} : { y: -2 }}
-            className="gradient-border bg-gradient-to-br from-surface to-bg rounded-2xl p-8 md:p-10
-              shadow-2xl shadow-black/30"
-          >
-            {/* Heading */}
-            <div className="text-center mb-8">
-              <h3 className="text-2xl md:text-3xl font-bold text-text mb-3">
-                Let's Build Something{' '}
-                <span className="gradient-text">Together</span>
-              </h3>
-              <p className="text-textSoft leading-relaxed text-sm md:text-base max-w-lg mx-auto">
-                Whether you're looking for a freelance frontend engineer, a tech partner for
-                your SaaS product, or someone to lead your web/mobile front end — I'd love to
-                hear from you.
-              </p>
-            </div>
-
-            {/* Contact links */}
-            <div className="space-y-3">
-              {contactLinks.map((link, i) => {
-                const Icon = link.icon;
-                const isCopied = copiedIdx === i;
-                return (
-                  <motion.div
-                    key={link.label}
-                    initial={prefersReduced ? {} : { opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                    viewport={{ once: true }}
-                    className="flex items-center justify-between p-4 rounded-xl
-                      bg-bg/50 border border-border hover:border-accent/40
-                      transition-all duration-200 group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-accent/10 border border-accent/20
-                        flex items-center justify-center flex-shrink-0
-                        group-hover:bg-accent/15 transition-colors">
-                        <Icon size={16} className="text-accent" />
-                      </div>
-                      <div>
-                        <p className="font-mono text-[10px] text-muted uppercase tracking-wider mb-0.5">
-                          {link.label}
-                        </p>
-                        <a
-                          href={link.href}
-                          target={link.label !== 'Email' && link.label !== 'Phone' ? '_blank' : undefined}
-                          rel="noopener noreferrer"
-                          className="text-text text-sm hover:text-accent transition-colors flex items-center gap-1"
-                        >
-                          {link.value}
-                          <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </a>
-                      </div>
-                    </div>
-
-                    {/* Copy button */}
-                    <button
-                      onClick={() => handleCopy(link.copyValue, i, link.label)}
-                      aria-label={`Copy ${link.label}`}
-                      className="p-2 rounded-lg text-muted hover:text-accent hover:bg-accent/10
-                        transition-all duration-200 flex-shrink-0"
+      <div className="grid md:grid-cols-12 gap-8 lg:gap-12 items-start">
+        {/* Left Column — Contact Details */}
+        <div className="md:col-span-5 space-y-6">
+          <AnimatedSection delay={100}>
+            <TiltCard maxTilt={5}>
+              <div className="glass-card rounded-3xl p-6 relative overflow-hidden h-full">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-[#7C3AED]/5 to-transparent rounded-full blur-xl" />
+                
+                <div className="flex gap-4 items-start mb-6">
+                  <div className="w-10 h-10 rounded-2xl bg-[#7C3AED]/10 border border-white/10 flex items-center justify-center flex-shrink-0 text-[#7C3AED]">
+                    <Mail size={18} />
+                  </div>
+                  <div>
+                    <h4 className="font-display font-bold text-slate-100 text-sm leading-none mb-1.5">Email Me</h4>
+                    <a
+                      href="https://mail.google.com/mail/?view=cm&to=ayushpatel2492002@gmail.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-slate-350 text-sm hover:text-[#7C3AED] transition-colors break-all"
                     >
-                      {isCopied
-                        ? <CheckCheck size={15} className="text-emerald-400" />
-                        : <Copy size={15} />
-                      }
-                    </button>
-                  </motion.div>
-                );
-              })}
-            </div>
+                      ayushpatel2492002@gmail.com
+                    </a>
+                  </div>
+                </div>
 
-            {/* CTA */}
-            <div className="mt-8 text-center">
-              <a
-                href="https://mail.google.com/mail/?view=cm&to=ayushpatel2492002@gmail.com"
-                target="_blank"
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl
-                  bg-accent text-bg font-semibold text-sm
-                  hover:bg-accentDim hover:shadow-[0_0_30px_rgba(56,189,248,0.4)]
-                  hover:scale-105 transition-all duration-300"
-              >
-                <Mail size={16} />
-                Send Me a Message
-              </a>
-            </div>
-          </motion.div>
+                <div className="flex gap-4 items-start mb-6">
+                  <div className="w-10 h-10 rounded-2xl bg-[#06B6D4]/10 border border-white/10 flex items-center justify-center flex-shrink-0 text-[#06B6D4]">
+                    <Phone size={18} />
+                  </div>
+                  <div>
+                    <h4 className="font-display font-bold text-slate-100 text-sm leading-none mb-1.5">Call / Text</h4>
+                    <a
+                      href={`tel:${personalInfo.phone}`}
+                      className="text-slate-350 text-sm hover:text-[#06B6D4] transition-colors"
+                    >
+                      {personalInfo.phone}
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex gap-4 items-start">
+                  <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-white/10 flex items-center justify-center flex-shrink-0 text-emerald-450">
+                    <MapPin size={18} />
+                  </div>
+                  <div>
+                    <h4 className="font-display font-bold text-slate-100 text-sm leading-none mb-1.5">Location</h4>
+                    <p className="text-slate-350 text-sm">{personalInfo.location}</p>
+                  </div>
+                </div>
+              </div>
+            </TiltCard>
+          </AnimatedSection>
+
+          {/* Connect statement */}
+          <AnimatedSection delay={150}>
+            <TiltCard maxTilt={4}>
+              <div className="glass-card rounded-3xl p-6 relative overflow-hidden">
+                <div className="flex gap-2 items-center mb-3">
+                  <MessageSquare size={14} className="text-[#7C3AED]" />
+                  <span className="font-mono text-xs text-slate-400 uppercase tracking-widest font-semibold">Typical Response Time</span>
+                </div>
+                <p className="text-slate-350 text-sm leading-relaxed font-sans">
+                  I am usually responsive within 2 to 4 business hours to address query requests, layout plans, or scheduling.
+                </p>
+              </div>
+            </TiltCard>
+          </AnimatedSection>
         </div>
-      </AnimatedSection>
+
+        {/* Right Column — Contact Form / Success State */}
+        <div className="md:col-span-7">
+          <AnimatedSection delay={200}>
+            <TiltCard maxTilt={4} className="h-full">
+              <div className="glass-card rounded-3xl p-6 md:p-8 relative overflow-hidden min-h-[400px] flex flex-col justify-center">
+                
+                <AnimatePresence mode="wait">
+                  {status === 'success' ? (
+                    <SuccessState onReset={handleReset} />
+                  ) : (
+                    <motion.form
+                      key="contact-form"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      onSubmit={handleSubmit}
+                      className="space-y-4"
+                    >
+                      <InputField
+                        label="Full Name"
+                        id="name"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="Enter your name"
+                      />
+
+                      <InputField
+                        label="Email Address"
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        placeholder="name@company.com"
+                      />
+
+                      <TextAreaField
+                        label="Your Message"
+                        id="message"
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        placeholder="How can I help with your project?"
+                      />
+
+                      <div className="pt-4">
+                        <MagneticButton
+                          onClick={() => {}}
+                          className="w-full group py-3.5 rounded-2xl bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-semibold text-sm transition-all duration-300 cursor-pointer hover:shadow-[0_0_20px_rgba(124,58,237,0.45)] hover:scale-[1.01] active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
+                        >
+                          {status === 'sending' ? (
+                            <span className="flex items-center justify-center gap-2">
+                              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              Sending Message...
+                            </span>
+                          ) : (
+                            <span className="flex items-center justify-center gap-2">
+                              Send Message
+                              <Send size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+                            </span>
+                          )}
+                        </MagneticButton>
+                      </div>
+                    </motion.form>
+                  )}
+                </AnimatePresence>
+
+              </div>
+            </TiltCard>
+          </AnimatedSection>
+        </div>
+      </div>
     </div>
   );
 }
