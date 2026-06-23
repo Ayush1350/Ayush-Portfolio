@@ -1,15 +1,35 @@
-import { useState } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Building2, Calendar, FolderGit2, ArrowUpRight, Github, ExternalLink } from 'lucide-react';
-import SectionHeading from './ui/SectionHeading';
-import AnimatedSection from './ui/AnimatedSection';
-import { projects } from '../data/portfolio';
-import TiltCard from './ui/TiltCard';
+import { useState } from 'react'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import {
+  Building2,
+  Calendar,
+  FolderGit2,
+  ArrowUpRight,
+  ExternalLink,
+} from 'lucide-react'
+import SectionHeading from './ui/SectionHeading'
+import AnimatedSection from './ui/AnimatedSection'
+import { projects } from '../data/portfolio'
+import TiltCard from './ui/TiltCard'
+import { GithubIcon } from './ui/SocialIcons'
 
-const filterCategories = ['All', 'SaaS', 'Dashboard', 'Mobile', 'Full-Stack', 'Ed-Tech'];
+const filterCategories = [
+  'All',
+  'SaaS',
+  'Dashboard',
+  'Mobile',
+  'Full-Stack',
+  'Ed-Tech',
+]
 
 // Interactive mockups rendering for SaaS/Dashboard elements inside dark glass
-function ProjectVisualMockup({ category, name }: { category: string; name: string }) {
+function ProjectVisualMockup({
+  category,
+  name,
+}: {
+  category: string
+  name: string
+}) {
   if (category === 'SaaS' || name === 'Flipspaces') {
     return (
       <div className="h-32 w-full bg-slate-950/40 border border-white/10 rounded-2xl overflow-hidden flex flex-col p-2.5 select-none backdrop-blur-md relative group-hover:border-white/20 transition-colors duration-300">
@@ -54,7 +74,7 @@ function ProjectVisualMockup({ category, name }: { category: string; name: strin
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   if (category === 'Dashboard') {
@@ -66,7 +86,9 @@ function ProjectVisualMockup({ category, name }: { category: string; name: strin
             <div className="w-2 h-2 rounded bg-[#7C3AED]" />
             <div className="h-2.5 bg-white/15 rounded w-20" />
           </div>
-          <div className="h-2 bg-emerald-500/20 text-emerald-400 rounded px-1.5 py-0.5 flex items-center text-[7px] font-bold">ACTIVE</div>
+          <div className="h-2 bg-emerald-500/20 text-emerald-400 rounded px-1.5 py-0.5 flex items-center text-[7px] font-bold">
+            ACTIVE
+          </div>
         </div>
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-2 flex-1">
@@ -88,7 +110,7 @@ function ProjectVisualMockup({ category, name }: { category: string; name: strin
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   if (category === 'Mobile') {
@@ -100,7 +122,9 @@ function ProjectVisualMockup({ category, name }: { category: string; name: strin
           <div className="w-6 h-0.5 bg-slate-800 rounded-full mx-auto mb-1" />
           {/* App screen */}
           <div className="flex-1 bg-[#0F172A] rounded-lg p-1 flex flex-col gap-1 overflow-hidden">
-            <div className="h-2 bg-[#7C3AED]/10 rounded w-full flex items-center px-1"><div className="w-4 h-0.5 bg-[#7C3AED]/40 rounded" /></div>
+            <div className="h-2 bg-[#7C3AED]/10 rounded w-full flex items-center px-1">
+              <div className="w-4 h-0.5 bg-[#7C3AED]/40 rounded" />
+            </div>
             <div className="w-full h-8 bg-white/5 rounded-md border border-white/5 p-0.5 flex flex-col justify-between">
               <div className="w-full h-0.5 bg-white/10 rounded" />
               <div className="w-1/2 h-1 bg-[#7C3AED]/40 rounded" />
@@ -118,7 +142,7 @@ function ProjectVisualMockup({ category, name }: { category: string; name: strin
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   // Default Full-Stack or Ed-Tech mockup
@@ -144,22 +168,23 @@ function ProjectVisualMockup({ category, name }: { category: string; name: strin
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export default function Projects() {
-  const [activeFilter, setActiveFilter] = useState('All');
-  const [showToast, setShowToast] = useState(false);
-  const prefersReduced = useReducedMotion();
+  const [activeFilter, setActiveFilter] = useState('All')
+  const [showToast, setShowToast] = useState(false)
+  const prefersReduced = useReducedMotion()
 
-  const filtered = activeFilter === 'All'
-    ? projects
-    : projects.filter(p => p.category === activeFilter);
+  const filtered =
+    activeFilter === 'All'
+      ? projects
+      : projects.filter((p) => p.category === activeFilter)
 
   const handleDemoClick = () => {
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
-  };
+    setShowToast(true)
+    setTimeout(() => setShowToast(false), 3000)
+  }
 
   return (
     <div>
@@ -179,7 +204,7 @@ export default function Projects() {
       {/* Filter bar */}
       <AnimatedSection delay={100}>
         <div className="flex flex-wrap gap-2 mb-10 bg-white/5 border border-white/10 p-1.5 rounded-2xl max-w-max backdrop-blur-md">
-          {filterCategories.map(cat => (
+          {filterCategories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveFilter(cat)}
@@ -212,16 +237,21 @@ export default function Projects() {
               initial={prefersReduced ? {} : { opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.92, y: 10 }}
-              transition={{ duration: 0.5, delay: i * 0.04, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+              transition={{
+                duration: 0.5,
+                delay: i * 0.04,
+                ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+              }}
               className="h-full"
             >
               <TiltCard maxTilt={5} className="h-full">
                 <div className="glass-card rounded-3xl p-5 transition-all duration-300 flex flex-col group cursor-default relative overflow-hidden h-full">
-                  
                   {/* Category & Period row */}
                   <div className="flex items-center justify-between mb-4">
-                    <span className="font-mono text-[9px] text-[#7C3AED] bg-white/5 border border-white/10
-                      px-2.5 py-1 rounded-lg uppercase tracking-wider font-semibold">
+                    <span
+                      className="font-mono text-[9px] text-[#7C3AED] bg-white/5 border border-white/10
+                      px-2.5 py-1 rounded-lg uppercase tracking-wider font-semibold"
+                    >
                       {project.category}
                     </span>
                     <span className="font-mono text-[10px] text-slate-400 flex items-center gap-1.5">
@@ -232,13 +262,19 @@ export default function Projects() {
 
                   {/* Visual SaaS Mockup */}
                   <div className="mb-4">
-                    <ProjectVisualMockup category={project.category} name={project.name} />
+                    <ProjectVisualMockup
+                      category={project.category}
+                      name={project.name}
+                    />
                   </div>
 
                   {/* Project name */}
                   <h3 className="text-lg md:text-xl font-display font-bold text-slate-100 mb-1 group-hover:text-[#7C3AED] transition-colors duration-300 flex items-center gap-1">
                     {project.name}
-                    <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 text-[#7C3AED]" />
+                    <ArrowUpRight
+                      size={14}
+                      className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 text-[#7C3AED]"
+                    />
                   </h3>
 
                   {/* Company */}
@@ -254,15 +290,22 @@ export default function Projects() {
 
                   {/* Highlight */}
                   {project.highlights.map((h, j) => (
-                    <div key={j} className="flex gap-2 mb-4 bg-slate-950/20 border border-white/5 p-2.5 rounded-xl">
-                      <span className="text-[#7C3AED] flex-shrink-0 text-xs mt-0.5 select-none">◆</span>
-                      <p className="text-slate-300 text-xs leading-relaxed font-sans">{h}</p>
+                    <div
+                      key={j}
+                      className="flex gap-2 mb-4 bg-slate-950/20 border border-white/5 p-2.5 rounded-xl"
+                    >
+                      <span className="text-[#7C3AED] flex-shrink-0 text-xs mt-0.5 select-none">
+                        ◆
+                      </span>
+                      <p className="text-slate-300 text-xs leading-relaxed font-sans">
+                        {h}
+                      </p>
                     </div>
                   ))}
 
                   {/* Tech badges */}
                   <div className="flex flex-wrap gap-1.5 pt-4 border-t border-white/5 mb-4">
-                    {project.tech.map(t => (
+                    {project.tech.map((t) => (
                       <span
                         key={t}
                         className="px-2 py-0.5 rounded-md text-[10px] font-mono font-medium
@@ -288,11 +331,10 @@ export default function Projects() {
                       rel="noopener noreferrer"
                       className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 text-xs font-semibold tracking-wide transition-all duration-300"
                     >
-                      <Github size={12} />
+                      <GithubIcon size={12} />
                       GitHub Code
                     </a>
                   </div>
-                  
                 </div>
               </TiltCard>
             </motion.div>
@@ -302,10 +344,13 @@ export default function Projects() {
 
       {filtered.length === 0 && (
         <div className="text-center py-20 text-slate-500 font-mono text-sm">
-          <FolderGit2 size={24} className="mx-auto mb-3 opacity-30 text-[#7C3AED]" />
+          <FolderGit2
+            size={24}
+            className="mx-auto mb-3 opacity-30 text-[#7C3AED]"
+          />
           No projects in this category yet.
         </div>
       )}
     </div>
-  );
+  )
 }
